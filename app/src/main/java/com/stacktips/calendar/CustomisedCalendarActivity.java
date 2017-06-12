@@ -16,19 +16,28 @@
 
 package com.stacktips.calendar;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.stacktips.view.CalendarListener;
 import com.stacktips.view.CustomCalendarView;
+import com.stacktips.view.DayDecorator;
+import com.stacktips.view.DayView;
+import com.stacktips.view.utils.CalendarUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 public class CustomisedCalendarActivity extends AppCompatActivity {
@@ -51,13 +60,15 @@ public class CustomisedCalendarActivity extends AppCompatActivity {
         Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
 
         //Show monday as first date of week
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY);
+        calendarView.setFirstDayOfWeek(Calendar.SUNDAY);
 
         //Show/hide overflow days of a month
         calendarView.setShowOverflowDate(false);
 
         //call refreshCalendar to update calendar the view
         calendarView.refreshCalendar(currentCalendar);
+
+
 
         //Handling custom calendar events
         calendarView.setCalendarListener(new CalendarListener() {
@@ -75,11 +86,17 @@ public class CustomisedCalendarActivity extends AppCompatActivity {
         });
 
         //Setting custom font
-        final Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Arch_Rival_Bold.ttf");
-        if (null != typeface) {
-            calendarView.setCustomTypeface(typeface);
-            calendarView.refreshCalendar(currentCalendar);
-        }
+//        final Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/Arch_Rival_Bold.ttf");
+//        if (null != typeface) {
+//            calendarView.setCustomTypeface(typeface);
+//            calendarView.refreshCalendar(currentCalendar);
+//        }
+
+        List decorators = new ArrayList<>();
+        decorators.add(new DisabledColorDecorator());
+        calendarView.setDecorators(decorators);
+        calendarView.refreshCalendar(currentCalendar);
+
     }
 
     @Override
@@ -90,4 +107,39 @@ public class CustomisedCalendarActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    private class DisabledColorDecorator implements DayDecorator {
+        @Override
+        public void decorate(DayView dayView) {
+
+            String viewdate = String.valueOf(dayView.getDate().getYear()+1900) + String.valueOf(dayView.getDate().getMonth()) + String.valueOf(dayView.getDate().getDate());
+            Log.e("Log", viewdate);
+            if (viewdate.equals("2017525")){
+                int color = Color.parseColor("#FF0000");
+                dayView.setBackgroundResource(R.drawable.selected_date_shape);
+                ((GradientDrawable)dayView.getBackground()).setColor(Color.RED);
+
+            }
+//            return (date.before(calendar.getTime())) ? true : false;
+//            if (CalendarUtils.isPastDay(dayView.getDate())) {
+//                int color = Color.parseColor("#FF0000");
+//                dayView.setBackgroundColor(color);
+//            }
+        }
+    }
+
+    private void CheckCa(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2017, 5, 10);
+//        calendar.set(Calendar.YEAR, 2017);
+//        calendar.set(Calendar.MONTH, 5);
+//        calendar.set(Calendar.DAY_OF_MONTH, 10);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+    }
+
+
+
 }

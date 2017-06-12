@@ -18,7 +18,9 @@ package com.stacktips.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -374,8 +376,10 @@ public class CustomCalendarView extends LinearLayout {
 
         // Mark current day as selected
         DayView view = getDayOfMonthText(currentCalendar);
-        view.setBackgroundColor(selectedDayBackground);
-        view.setTextColor(selectedDayTextColor);
+//        view.setBackgroundColor(selectedDayBackground);
+//        view.setBackgroundResource(R.drawable.selected_date_shape);
+//        ((GradientDrawable)view.getBackground()).setColor(Color.RED);
+//        view.setTextColor(selectedDayTextColor);
     }
 
     private void storeLastValues(Date currentDate) {
